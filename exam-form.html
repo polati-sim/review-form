@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Экзаменационный бланк СКД — Полати (демо)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#EC5A24;--orange-d:#C9440F;--orange-bg:#FDE9E0;
+  --ink:#1E2528;--ink2:#2E393D;
+  --teal:#17705E;--teal-d:#0F5446;--mint:#E3F5EE;--mint2:#BFE8D6;
+  --amber:#E9A020;--amber-bg:#FDF3DC;
+  --paper:#F4F5F2;--card:#fff;--line:#E1E5E0;--muted:#66717A;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.45;padding-bottom:100px}
+button,input,textarea{font:inherit;color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px}
+
+/* header */
+.top{background:var(--ink);border-bottom:5px solid var(--orange);padding:18px 0 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand svg{width:46px;height:46px;flex:none}
+.brand .name{color:#fff;font-weight:800;font-size:24px;letter-spacing:.04em;line-height:1}
+.brand .sub{color:var(--orange);font-size:11px;font-weight:700;margin-top:4px;line-height:1.2}
+.top h1{color:#fff;font-size:19px;font-weight:800;line-height:1.25;margin:16px 0 0}
+
+/* student strip */
+.strip-wrap{position:sticky;top:0;z-index:6;background:rgba(244,245,242,.97);border-bottom:1px solid var(--line);padding:8px 0 5px}
+.strip-wrap .wrap{padding:0}
+.strip{display:flex;gap:8px;overflow-x:auto;padding:2px 14px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.st{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:1px;min-width:108px;max-width:190px;padding:7px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;text-align:left}
+.st b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:flex;align-items:center;gap:6px}
+.st b span.t{overflow:hidden;text-overflow:ellipsis}
+.st small{font-size:12px;color:var(--muted);font-weight:600}
+.st.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.st.on small{color:#B9C4C0}
+.dot2{width:9px;height:9px;border-radius:50%;background:#C7CEC9;flex:none}
+.dot2.pass{background:#3FBF8F}
+.dot2.fail{background:var(--orange)}
+.add{flex:none;padding:0 14px;border-radius:12px;border:1.5px dashed var(--teal);background:var(--mint);color:var(--teal-d);font-weight:800;cursor:pointer;min-height:46px;white-space:nowrap}
+.savestate{font-size:11px;color:var(--muted);padding:2px 14px 0;font-weight:600}
+.savestate.err{color:var(--orange-d)}
+.strip button:focus-visible{outline:3px solid rgba(23,112,94,.35);outline-offset:2px}
+
+.demo{background:var(--mint);border:1px solid var(--mint2);color:var(--teal-d);border-radius:12px;padding:10px 12px;font-size:13px;margin:14px 0 0}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 2px rgba(30,37,40,.05);padding:14px;margin-top:14px}
+.card h2{font-size:16px;margin:0 0 10px;font-weight:800}
+.card p{margin:0 0 10px;font-size:13px;color:var(--muted)}
+
+/* head form */
+.head{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:start}
+.photo{width:104px;height:132px;border-radius:14px;border:2px dashed #B9C2BD;background:#F8FAF8;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:12px;color:var(--muted);cursor:pointer;overflow:hidden;position:relative;padding:6px}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.photo.has{border-style:solid;border-color:var(--teal)}
+.photo.has img{display:block}
+.photo.has .ph{display:none}
+.photo .ph svg{width:28px;height:28px;stroke:var(--teal);margin-bottom:4px}
+.photo input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.rm-photo{margin-top:6px;background:none;border:0;color:var(--orange-d);font-size:12px;font-weight:700;padding:4px 0;cursor:pointer;display:none}
+.rm-photo.show{display:block}
+.fields{display:grid;grid-template-columns:1fr;gap:10px}
+.f label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 4px}
+.f input{width:100%;height:46px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;background:#fff;font-size:15px}
+.f input:focus,textarea:focus,.time input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(23,112,94,.15)}
+.f.wide{grid-column:1/-1}
+@media(min-width:600px){
+  .head{grid-template-columns:120px 1fr}
+  .photo{width:120px;height:150px}
+  .fields{grid-template-columns:1fr 1fr}
+}
+
+/* section head */
+.sec{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:26px 0 0;padding:0 2px}
+.sec h2{margin:0;font-size:17px;font-weight:800}
+.sec .min{font-size:12px;color:var(--muted);margin-top:2px}
+.sec .pts{background:var(--ink);color:#fff;border-radius:999px;padding:6px 12px;font-weight:800;font-size:14px;white-space:nowrap}
+.sec .pts.ok{background:var(--teal)}
+.sec .pts.low{background:var(--orange)}
+
+/* exercise card */
+.ex{background:var(--card);border:1px solid var(--line);border-left:6px solid #CBD2CD;border-radius:14px;padding:12px 12px 10px;margin-top:10px;box-shadow:0 1px 2px rgba(30,37,40,.05)}
+.ex[data-s="0"]{border-left-color:var(--orange)}
+.ex[data-s="1"]{border-left-color:var(--amber)}
+.ex[data-s="2"]{border-left-color:var(--teal)}
+.ex-top{display:flex;gap:10px;align-items:flex-start}
+.num{flex:none;width:28px;height:28px;border-radius:9px;background:var(--ink);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.ex-title{font-weight:700;font-size:15px;line-height:1.3;padding-top:3px}
+.ex-ctrl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+.time{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);font-weight:600}
+.time input{width:70px;height:46px;border:1.5px solid var(--line);border-radius:10px;text-align:center;font-size:17px;font-weight:700;background:#fff;-moz-appearance:textfield}
+.time input::-webkit-outer-spin-button,.time input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.score{display:flex;gap:6px;margin-left:auto}
+.score button{width:52px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:800;font-size:18px;cursor:pointer}
+.score button:focus-visible,.more:focus-visible,.hint button:focus-visible,.btn:focus-visible{outline:3px solid rgba(23,112,94,.35);outline-offset:2px}
+.score button[data-s="0"].on{background:var(--orange);border-color:var(--orange);color:#fff}
+.score button[data-s="1"].on{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+.score button[data-s="2"].on{background:var(--teal);border-color:var(--teal);color:#fff}
+.hint{display:none;align-items:center;gap:8px;justify-content:space-between;background:var(--amber-bg);border-radius:10px;padding:8px 10px;margin-top:10px;font-size:13px}
+.hint.show{display:flex}
+.hint.red{background:var(--orange-bg)}
+.hint button{flex:none;border:0;background:var(--ink);color:#fff;border-radius:8px;padding:8px 12px;font-weight:700;font-size:13px;cursor:pointer;min-height:36px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
+.chip.g{background:var(--orange-bg);color:var(--orange-d)}
+.chip.r{background:var(--amber-bg);color:#8A5A00}
+.chip.n{background:#EEF0EE;color:var(--ink2)}
+.more{margin-top:10px;width:100%;height:44px;border-radius:10px;border:1.5px dashed #B9C2BD;background:#FAFBFA;color:var(--teal-d);font-weight:700;cursor:pointer}
+.more.has{border-style:solid;border-color:var(--teal);background:var(--mint)}
+
+/* summary card */
+.sumrow{margin-top:12px}
+.sumrow .l{display:flex;justify-content:space-between;font-weight:700;font-size:14px}
+.sumrow .l span:last-child{font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:99px;background:#E9ECE8;margin-top:6px;position:relative;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .2s}
+.bar i.low{background:var(--orange)}
+.sumrow .m{font-size:12px;color:var(--muted);margin-top:3px}
+.verdict{margin-top:16px;border-radius:12px;padding:12px 14px;font-weight:700}
+.verdict.wait{background:#EEF0EE}
+.verdict.pass{background:var(--mint);color:var(--teal-d)}
+.verdict.fail{background:var(--orange-bg);color:var(--orange-d)}
+.verdict small{display:block;font-weight:600;font-size:13px;margin-top:4px;color:inherit;opacity:.9}
+.sign{display:grid;gap:10px;margin-top:16px}
+.sign label{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600}
+.sign input{width:22px;height:22px;accent-color:var(--teal)}
+.actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{flex:1;min-width:140px;height:46px;border-radius:12px;border:1.5px solid var(--ink);background:#fff;font-weight:800;cursor:pointer}
+.btn.pri{background:var(--orange);border-color:var(--orange);color:#fff}
+.btn.danger{border-color:var(--orange-d);color:var(--orange-d)}
+.btn.sm{height:42px;font-size:14px}
+
+.sentline{margin-top:12px;font-size:13px;color:var(--muted);font-weight:600}
+.sentline.ok{color:var(--teal-d)}
+.sentline.err{color:var(--orange-d)}
+
+/* sticky bar */
+.bar-fix{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 -4px 14px rgba(0,0,0,.18)}
+.bar-fix .in{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bar-fix .t{font-size:12px;opacity:.75;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+.bar-fix .v{font-size:22px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.bar-fix .v small{font-size:14px;opacity:.7;font-weight:700}
+.pill{border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px;background:#3A464A;text-align:center}
+.pill.pass{background:var(--teal)}
+.pill.fail{background:var(--orange)}
+
+/* dialog */
+dialog{padding:0;border:0;border-radius:20px;width:min(580px,calc(100% - 24px));max-height:90vh;background:#fff;color:var(--ink)}
+dialog[open]{display:flex;flex-direction:column}
+dialog::backdrop{background:rgba(30,37,40,.55)}
+@media(max-width:600px){
+  dialog{width:100%;max-width:100%;margin:auto 0 0;border-radius:20px 20px 0 0;max-height:92vh}
+}
+.dh{padding:16px 16px 10px;border-bottom:1px solid var(--line)}
+.dh b{display:block;font-size:16px;line-height:1.3}
+.dh span{font-size:12px;color:var(--muted)}
+.db{padding:6px 16px 14px;overflow:auto;-webkit-overflow-scrolling:touch}
+.db h3{font-size:14px;margin:16px 0 6px;font-weight:800;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 8px;border-radius:10px;font-size:14px;cursor:pointer;line-height:1.35}
+.opt:hover{background:#F6F7F5}
+.opt input{flex:none;width:22px;height:22px;margin-top:0;accent-color:var(--teal)}
+.opt.g input{accent-color:var(--orange)}
+.opt.r input{accent-color:var(--amber)}
+textarea{width:100%;min-height:84px;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;background:#fff}
+.df{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.df .btn{width:100%;flex:none}
+
+@media print{
+  .bar-fix,.actions,.more,.hint,.rm-photo,.demo,.strip-wrap,#dataCard,#cfgCard,.sentline{display:none!important}
+  body{background:#fff;padding:0}
+  .ex,.card{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <polygon points="24,3 33,19 15,19" fill="#EC5A24"/>
+        <polygon points="13,22 22,38 4,38" fill="#fff" opacity=".92"/>
+        <polygon points="35,22 44,38 26,38" fill="#EC5A24"/>
+      </svg>
+      <div>
+        <div class="name">ПОЛАТИ</div>
+        <div class="sub">профессиональный учебный центр</div>
+      </div>
+    </div>
+    <h1>Экзаменационный бланк практической части СКД</h1>
+  </div>
+</header>
+
+<div class="strip-wrap">
+  <div class="wrap">
+    <div class="strip" id="strip"></div>
+    <div class="savestate" id="saveState"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="demo">Демо-версия. Все слушатели группы ведутся на одной странице: переключайтесь между ними сверху. Данные сохраняются сами в этом браузере на этом устройстве. Вкладку можно закрывать. Если подключена Google Таблица, кнопка «Отправить в таблицу» передаёт только код слушателя, баллы, время и отметки об ошибках. ФИО слушателя и фото остаются на устройстве.</div>
+
+  <section class="card">
+    <div class="head">
+      <div>
+        <label class="photo" id="photoBox">
+          <span class="ph">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            Фото слушателя
+          </span>
+          <img id="photoImg" alt="Фото слушателя">
+          <input type="file" id="photoIn" accept="image/*" aria-label="Добавить фото слушателя">
+        </label>
+        <button type="button" class="rm-photo" id="rmPhoto">Убрать фото</button>
+      </div>
+      <div class="fields">
+        <div class="f wide"><label for="fio">ФИО слушателя</label><input id="fio" type="text" placeholder="Фамилия Имя" autocomplete="off"></div>
+        <div class="f"><label for="code">Код слушателя (уйдёт в таблицу вместо ФИО)</label><input id="code" type="text" placeholder="Например, Г12-07" autocomplete="off" maxlength="40"></div>
+        <div class="f"><label for="date">Дата</label><input id="date" type="date"></div>
+        <div class="f"><label for="instr">ФИО инструктора группы</label><input id="instr" type="text" placeholder="Фамилия И. О." autocomplete="off"></div>
+        <div class="f"><label for="exam">ФИО экзаменатора</label><input id="exam" type="text" placeholder="Фамилия И. О." autocomplete="off"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="list"></div>
+
+  <section class="card" id="sumCard">
+    <h2>Итог экзамена</h2>
+    <div id="sumRows"></div>
+    <div class="verdict wait" id="verdict"></div>
+    <div class="sentline" id="sentLine"></div>
+    <div class="sign">
+      <label><input type="checkbox" id="sign0"> Слушатель ознакомлен с результатами</label>
+      <label><input type="checkbox" id="sign1"> Экзаменатор подтверждает результаты</label>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn pri" id="send">Отправить в таблицу</button>
+      <button type="button" class="btn" id="print">Распечатать</button>
+      <button type="button" class="btn" id="clear">Очистить бланк</button>
+      <button type="button" class="btn danger" id="delStudent">Удалить слушателя</button>
+    </div>
+  </section>
+
+  <section class="card" id="cfgCard">
+    <h2>Таблица Google</h2>
+    <p>Вставьте адрес веб-приложения из Google Apps Script и секретное слово, которое вы задали в скрипте. Настройка хранится только на этом устройстве.</p>
+    <div class="fields">
+      <div class="f wide"><label for="cfgUrl">Адрес веб-приложения</label><input id="cfgUrl" type="text" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off"></div>
+      <div class="f wide"><label for="cfgToken">Секретное слово</label><input id="cfgToken" type="password" autocomplete="off"></div>
+    </div>
+    <div class="actions"><button type="button" class="btn sm" id="cfgTest">Проверить связь</button></div>
+    <div class="sentline" id="cfgMsg"></div>
+  </section>
+
+  <section class="card" id="dataCard">
+    <h2>Данные на этом устройстве</h2>
+    <p>Список слушателей хранится в памяти браузера. С другого телефона, компьютера или браузера он не виден. Если очистить данные браузера или открыть страницу в режиме инкогнито, записи не сохранятся. Скачайте копию, чтобы не потерять результаты или перенести их на другое устройство.</p>
+    <div class="actions" style="margin-top:0">
+      <button type="button" class="btn sm" id="export">Скачать копию</button>
+      <button type="button" class="btn sm" id="importBtn">Загрузить копию</button>
+      <button type="button" class="btn sm danger" id="wipe">Удалить все данные</button>
+    </div>
+    <input type="file" id="importIn" accept="application/json,.json" style="display:none">
+    <p style="margin:10px 0 0">На общем компьютере после экзамена скачайте копию и нажмите «Удалить все данные».</p>
+  </section>
+</main>
+
+<div class="bar-fix">
+  <div class="in">
+    <div><div class="t" id="barName">Слушатель</div><div class="v"><span id="barTotal">0</span> <small>из 34</small></div></div>
+    <div class="pill" id="barPill">Заполнено 0 из 17</div>
+  </div>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <div class="dh"><b id="dlgTitle"></b><span>Отметьте всё, что относится к выполнению. Оценка проставится сама, её можно поменять вручную.</span></div>
+  <div class="db" id="dlgBody"></div>
+  <div class="df"><button type="button" class="btn pri" id="dlgClose">Готово</button></div>
+</dialog>
+
+<script>
+/* ===== данные упражнений ===== */
+var BLOCKS=[
+  {id:1,title:'Силовые упражнения',min:15,max:20,from:1,to:10},
+  {id:2,title:'Узлы',min:6,max:10,from:11,to:15},
+  {id:3,title:'Навески и работа с верёвками',min:2,max:4,from:16,to:17}
+];
+var EX=[
+  {n:1,t:'Подъём на СУ + Жумар',time:1,b:1},
+  {n:2,t:'Подъём на СУ + Жумар + Блок-Ролик',time:1,b:1},
+  {n:3,t:'Подъём на зажимах, спуск полушагами',time:1,b:1},
+  {n:4,t:'Переход с комплекта на комплект канатов',time:1,b:1},
+  {n:5,t:'Проход через узлы',time:1,b:1},
+  {n:6,t:'Преодоление оттяжки при подъёме и спуске',time:1,b:1},
+  {n:7,t:'Прохождение промежуточного закрепления (Карем)',time:1,b:1},
+  {n:8,t:'Выход через перегиб, преодоление протектора',time:1,b:1},
+  {n:9,t:'ИТО',time:1,b:1},
+  {n:10,t:'Спас. работы при зависании на спусковом устройстве',time:1,b:1},
+  {n:11,t:'Узел: Восьмёрка проводник',b:2,knot:1},
+  {n:12,t:'Узел: Восьмёрка проводник, заячьи уши',b:2,knot:1},
+  {n:13,t:'Узел: Австрийский проводник',b:2,knot:1},
+  {n:14,t:'Узел: Прямой',b:2,knot:1},
+  {n:15,t:'Узел: Стопорный',b:2,knot:1},
+  {n:16,t:'Базовая навеска',b:3,knot:1},
+  {n:17,t:'Y-образная навеска',b:3,knot:1}
+];
+var G_COMMON=[
+  {id:'g_refuse',t:'Отказ от выполнения или неспособность выполнить'},
+  {id:'g_onepoint',t:'Осталась одна точка присоединения к верёвке или анкеру'},
+  {id:'g_gate',t:'Карабин страховки открыт, не замуфтован'},
+  {id:'g_indep',t:'Нет двух независимых точек соединения'},
+  {id:'g_austrian',t:'Австрийский проводник в роли страховочной точки: неверно или встёгнут в «В/С»'},
+  {id:'g_siz',t:'Привязь не застёгнута или неверно надета, нет каски или упала каска'},
+  {id:'g_thread',t:'СИЗ и снаряжение заправлены неверно'},
+  {id:'g_drop',t:'Упало металлическое снаряжение (зажим, блок-ролик, карабин)'},
+  {id:'g_time',t:'Не уложился во время: больше 25 минут'},
+  {id:'g_slack',t:'Чрезмерное провисание страховки, фактор падения больше 2'},
+  {id:'g_clamp',t:'Неверное управление страховочным зажимом, зажал зажим рукой'},
+  {id:'g_three',t:'Три замечания = оценка «0»'},
+  {id:'g_switch',t:'Переход с комплекта на комплект: остался на 1–3 точках присоединения'},
+  {id:'g_deflect',t:'Оттяжка: верёвка не встёгнута в карабин'},
+  {id:'g_karem',t:'Малый карем: доп. точка крепления в один карабин анкера'},
+  {id:'g_protector',t:'Протектор: нет защиты верёвок в опасных местах'},
+  {id:'g_rescue',t:'Спас. работы: нет контроля скорости, одна точка соединения, спас через «ВС»'}
+];
+var R_COMMON=[
+  {id:'r_task',t:'Не понял задание'},
+  {id:'r_descender',t:'Спусковое не заблокировано, нет контроля скорости спуска'},
+  {id:'r_siz',t:'СИЗ настроены неверно, нет перчаток'},
+  {id:'r_textile',t:'Упало текстильное СИЗ или снаряжение (педаль, петля)'},
+  {id:'r_time',t:'Не уложился во время: больше 20 минут'},
+  {id:'r_rescue',t:'Спас. работы: нет карабина для трения, сильная натяжка точки «ВС»'},
+  {id:'r_break',t:'Карабин нагружен на излом (без поломки)'},
+  {id:'r_slack',t:'Большое провисание верёвки между зажимами'},
+  {id:'r_clamp',t:'Некорректное управление зажимами при спуске или манёвре'},
+  {id:'r_two',t:'Два замечания = оценка «1»'},
+  {id:'r_deflect',t:'Оттяжка: открыт карабин или прошёл через точку «А»'},
+  {id:'r_switch',t:'Переход комплект на комплект: открыт карабин уса или спускового'},
+  {id:'r_ito',t:'ИТО: открыт карабин или прошёл через точку «А»'},
+  {id:'r_hint',t:'Выполнил с подсказкой инструктора'},
+  {id:'r_dup',t:'При проходе узлов создал дублирующую точку на рабочем канате'},
+  {id:'r_siz2',t:'Некорректное использование СИЗ и снаряжения'}
+];
+var G_KNOT=[
+  {id:'gk_wrong',t:'Узел завязан неверно'},
+  {id:'gk_slip',t:'Узел ползёт и развязывается'},
+  {id:'gk_other',t:'Завязан не тот узел, который назвал инструктор'},
+  {id:'gk_control',t:'Нет контрольного узла (если он нужен)'}
+];
+var R_KNOT=[
+  {id:'rk_loose',t:'Узел сформирован, но не расправлен, есть перехлёсты'},
+  {id:'rk_optional',t:'Узел верный, но не из перечня обязательных'},
+  {id:'rk_tail',t:'Ходовой конец меньше 10 диаметров верёвки'},
+  {id:'rk_shape',t:'Узлы не сформированы и протянуты'}
+];
+var LABEL={};
+[G_COMMON,R_COMMON,G_KNOT,R_KNOT].forEach(function(a){a.forEach(function(o){LABEL[o.id]=o.t;});});
+
+/* ===== вспомогательное ===== */
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function exOf(n){return EX.filter(function(e){return e.n===n;})[0];}
+function pad(x){return String(x).padStart(2,'0');}
+function today(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function hhmm(){var d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes());}
+function uid(){return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function blankRows(){var r={};EX.forEach(function(e){r[e.n]={time:'',score:null,auto:false,g:[],r:[],note:''};});return r;}
+function newStudent(from){
+  return {id:uid(),fio:'',code:'',sent:'',date:from?from.date:today(),instr:from?from.instr:'',exam:from?from.exam:'',photo:'',rows:blankRows(),sign:[false,false]};
+}
+/* приводим любые данные (из памяти или файла) к безопасному виду */
+function normStudent(s){
+  var o=newStudent();
+  o.id=(typeof s.id==='string'&&s.id)?s.id.slice(0,40):uid();
+  ['fio','instr','exam','code'].forEach(function(k){o[k]=typeof s[k]==='string'?s[k].slice(0,120):'';});
+  o.code=o.code.slice(0,40);
+  o.sent=typeof s.sent==='string'?s.sent.slice(0,40):'';
+  o.date=(typeof s.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s.date))?s.date:today();
+  o.photo=(typeof s.photo==='string'&&s.photo.indexOf('data:image/')===0)?s.photo:'';
+  o.sign=[!!(s.sign&&s.sign[0]),!!(s.sign&&s.sign[1])];
+  EX.forEach(function(e){
+    var r=s.rows&&s.rows[e.n];if(!r)return;
+    var t=String(r.time===undefined?'':r.time).replace(/\D/g,'').slice(0,2);
+    o.rows[e.n]={
+      time:t,
+      score:(r.score===0||r.score===1||r.score===2)?r.score:null,
+      auto:!!r.auto,
+      g:(Array.isArray(r.g)?r.g:[]).filter(function(id){return LABEL[id]&&id.charAt(0)==='g';}),
+      r:(Array.isArray(r.r)?r.r:[]).filter(function(id){return LABEL[id]&&id.charAt(0)==='r';}),
+      note:typeof r.note==='string'?r.note.slice(0,1000):''
+    };
+  });
+  return o;
+}
+function normDB(d){
+  var list=(d&&Array.isArray(d.list)?d.list:[]).map(normStudent);
+  if(!list.length)list=[newStudent()];
+  var cur=d&&d.cur;
+  if(!list.some(function(s){return s.id===cur;}))cur=list[0].id;
+  return {cur:cur,list:list};
+}
+
+/* ===== хранилище ===== */
+var KEY='polati-exam-v1';
+var DB;
+try{DB=normDB(JSON.parse(localStorage.getItem(KEY)));}catch(e){DB=normDB(null);}
+function S(){return DB.list.filter(function(s){return s.id===DB.cur;})[0]||DB.list[0];}
+var saveTimer=null;
+function setState(t,err){var el=$('saveState');el.textContent=t;el.className='savestate'+(err?' err':'');}
+function flush(){
+  clearTimeout(saveTimer);saveTimer=null;
+  try{localStorage.setItem(KEY,JSON.stringify(DB));setState('Сохранено на этом устройстве, '+hhmm());}
+  catch(e){setState('Не удалось сохранить: память браузера недоступна или заполнена. Скачайте копию внизу страницы.',true);}
+}
+function save(){setState('Сохраняю…');clearTimeout(saveTimer);saveTimer=setTimeout(flush,250);}
+window.addEventListener('pagehide',function(){if(saveTimer)flush();});
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&saveTimer)flush();});
+
+/* ===== расчёт ===== */
+function calc(st){
+  var done=0,total=0,bs={1:0,2:0,3:0};
+  EX.forEach(function(e){var s=st.rows[e.n].score;if(s!==null){done++;total+=s;bs[e.b]+=s;}});
+  return {done:done,total:total,bs:bs,ok:done===17&&total>=23&&bs[1]>=15&&bs[2]>=6&&bs[3]>=2};
+}
+function shortName(s,i){
+  var p=(s.fio||'').trim().split(/\s+/).filter(Boolean);
+  if(!p.length)return (s.code&&s.code.trim())||'Слушатель '+(i+1);
+  return p[0]+(p[1]?' '+p[1].charAt(0).toUpperCase()+'.':'');
+}
+
+/* ===== построение списка упражнений ===== */
+function build(){
+  var h='';
+  BLOCKS.forEach(function(b){
+    h+='<div class="sec"><div><h2>'+b.title+'</h2><div class="min">Минимум для сдачи блока: '+b.min+' из '+b.max+'</div></div><div class="pts" id="bs'+b.id+'">0 / '+b.max+'</div></div>';
+    EX.filter(function(e){return e.b===b.id;}).forEach(function(e){
+      h+='<div class="ex" data-n="'+e.n+'" data-s="">'+
+        '<div class="ex-top"><span class="num">'+e.n+'</span><div class="ex-title">'+e.t+'</div></div>'+
+        '<div class="ex-ctrl">'+
+          (e.time?'<label class="time">Время <input type="number" inputmode="numeric" min="0" max="99" step="1" placeholder="0" aria-label="Время выполнения, минут"> мин</label>':'')+
+          '<div class="score" role="group" aria-label="Оценка">'+
+            '<button type="button" data-s="0" aria-label="Оценка 0">0</button>'+
+            '<button type="button" data-s="1" aria-label="Оценка 1">1</button>'+
+            '<button type="button" data-s="2" aria-label="Оценка 2">2</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="hint"><span></span><button type="button">Отметить</button></div>'+
+        '<div class="chips"></div>'+
+        '<button type="button" class="more">+ Ошибки и замечания</button>'+
+      '</div>';
+    });
+  });
+  $('list').innerHTML=h;
+}
+
+/* ===== обновление карточки ===== */
+function upd(n,skipSum){
+  var r=S().rows[n],c=document.querySelector('.ex[data-n="'+n+'"]');
+  c.dataset.s=r.score===null?'':r.score;
+  c.querySelectorAll('.score button').forEach(function(b){b.classList.toggle('on',+b.dataset.s===r.score);});
+  var chips='';
+  r.g.forEach(function(id){chips+='<span class="chip g" title="'+esc(LABEL[id])+'">'+esc(LABEL[id])+'</span>';});
+  r.r.forEach(function(id){chips+='<span class="chip r" title="'+esc(LABEL[id])+'">'+esc(LABEL[id])+'</span>';});
+  if(r.note.trim()){chips+='<span class="chip n">Комментарий</span>';}
+  c.querySelector('.chips').innerHTML=chips;
+  var cnt=r.g.length+r.r.length+(r.note.trim()?1:0);
+  var more=c.querySelector('.more');
+  more.classList.toggle('has',cnt>0);
+  more.textContent=cnt>0?'Ошибки и замечания: '+cnt:'+ Ошибки и замечания';
+  var hint=c.querySelector('.hint'),t=parseInt(r.time,10),show=false;
+  if(exOf(n).time&&!isNaN(t)){
+    if(t>25&&r.g.indexOf('g_time')<0){hint.className='hint red show';hint.firstChild.textContent='Больше 25 минут: по правилам это грубая ошибка.';hint.dataset.add='g_time';show=true;}
+    else if(t>20&&t<=25&&r.r.indexOf('r_time')<0&&r.g.indexOf('g_time')<0){hint.className='hint show';hint.firstChild.textContent='Больше 20 минут: по правилам это замечание.';hint.dataset.add='r_time';show=true;}
+  }
+  if(!show){hint.className='hint';}
+  if(!skipSum)summary();
+}
+function autoScore(n){
+  var r=S().rows[n];
+  if(r.g.length>0){r.score=0;r.auto=true;}
+  else if(r.r.length>0){if(r.score===null||r.score===2||r.auto){r.score=1;r.auto=true;}}
+  else if(r.auto){r.score=null;r.auto=false;}
+}
+
+/* ===== список слушателей сверху ===== */
+function renderStrip(){
+  var h=DB.list.map(function(s,i){
+    var c=calc(s),dot=c.done<17?'':(c.ok?' pass':' fail');
+    return '<button type="button" class="st'+(s.id===DB.cur?' on':'')+'" data-id="'+esc(s.id)+'"><b><span class="dot2'+dot+'"></span><span class="t">'+esc(shortName(s,i))+'</span></b><small>'+(c.done<17?'заполнено '+c.done+'/17':c.total+' из 34')+'</small></button>';
+  }).join('');
+  h+='<button type="button" class="add" id="addSt">+ Слушатель</button>';
+  $('strip').innerHTML=h;
+}
+function scrollStrip(){
+  var el=$('strip').querySelector('.st.on');
+  if(el&&el.scrollIntoView){try{el.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}}
+}
+
+/* ===== итоги ===== */
+function summary(){
+  var st=S(),c=calc(st),done=c.done,total=c.total,bs=c.bs;
+  var idx=DB.list.indexOf(st),nm=shortName(st,idx);
+  $('barTotal').textContent=total;
+  $('barName').textContent=nm;
+  document.title=nm+' · '+total+'/34 · Экзамен СКД';
+  var rowsH='';
+  BLOCKS.forEach(function(b){
+    var p=$('bs'+b.id);p.textContent=bs[b.id]+' / '+b.max;
+    var rated=EX.filter(function(e){return e.b===b.id&&st.rows[e.n].score!==null;}).length;
+    var all=b.to-b.from+1;
+    p.className='pts'+(rated===all?(bs[b.id]>=b.min?' ok':' low'):'');
+    rowsH+='<div class="sumrow"><div class="l"><span>'+b.title+'</span><span>'+bs[b.id]+' / '+b.max+'</span></div>'+
+      '<div class="bar"><i class="'+(rated===all&&bs[b.id]<b.min?'low':'')+'" style="width:'+(bs[b.id]/b.max*100)+'%"></i></div>'+
+      '<div class="m">Минимум для сдачи: '+b.min+'</div></div>';
+  });
+  rowsH+='<div class="sumrow"><div class="l"><span>Всего за экзамен</span><span>'+total+' / 34</span></div>'+
+    '<div class="bar"><i class="'+(done===17&&total<23?'low':'')+'" style="width:'+(total/34*100)+'%"></i></div>'+
+    '<div class="m">Минимум для сдачи практической части: 23</div></div>';
+  $('sumRows').innerHTML=rowsH;
+  var v=$('verdict'),pill=$('barPill');
+  if(done<17){
+    v.className='verdict wait';v.innerHTML='Заполнено упражнений: '+done+' из 17<small>Результат появится, когда будут выставлены все оценки.</small>';
+    pill.className='pill';pill.textContent='Заполнено '+done+' из 17';
+  }else if(c.ok){
+    v.className='verdict pass';v.innerHTML='Практическая часть сдана<small>Набрано '+total+' из 34 баллов, минимум по каждому блоку выполнен.</small>';
+    pill.className='pill pass';pill.textContent='Сдан';
+  }else{
+    var why=[];
+    if(bs[1]<15)why.push('силовые упражнения: меньше 15 баллов');
+    if(bs[2]<6)why.push('узлы: меньше 6 баллов, экзаменатор может дать одну попытку исправить');
+    if(bs[3]<2)why.push('навески: меньше 2 баллов, экзаменатор может дать одну попытку исправить');
+    if(total<23)why.push('общая сумма меньше 23');
+    v.className='verdict fail';v.innerHTML='Практическая часть не сдана<small>'+why.join('; ')+'.</small>';
+    pill.className='pill fail';pill.textContent='Не сдан';
+  }
+  renderStrip();showSent();
+}
+
+/* ===== загрузка выбранного слушателя в форму ===== */
+function setPhoto(src){
+  if(src){$('photoImg').src=src;$('photoBox').classList.add('has');$('rmPhoto').classList.add('show');}
+  else{$('photoImg').removeAttribute('src');$('photoBox').classList.remove('has');$('rmPhoto').classList.remove('show');}
+}
+function load(){
+  var s=S();
+  $('fio').value=s.fio;$('code').value=s.code;$('date').value=s.date;$('instr').value=s.instr;$('exam').value=s.exam;
+  $('sign0').checked=s.sign[0];$('sign1').checked=s.sign[1];
+  setPhoto(s.photo);
+  document.querySelectorAll('.ex').forEach(function(c){
+    var n=+c.dataset.n,inp=c.querySelector('.time input');
+    if(inp)inp.value=s.rows[n].time;
+  });
+  EX.forEach(function(e){upd(e.n,true);});
+  summary();scrollStrip();
+}
+function switchTo(id){
+  if(id===DB.cur)return;
+  DB.cur=id;save();load();window.scrollTo(0,0);
+}
+
+/* ===== события: список упражнений ===== */
+$('list').addEventListener('click',function(ev){
+  var c=ev.target.closest('.ex');if(!c)return;
+  var n=+c.dataset.n,r=S().rows[n];
+  var sb=ev.target.closest('.score button');
+  if(sb){var s=+sb.dataset.s;r.score=(r.score===s)?null:s;r.auto=false;upd(n);save();return;}
+  if(ev.target.closest('.more')){openDlg(n);return;}
+  var hb=ev.target.closest('.hint button');
+  if(hb){
+    var id=c.querySelector('.hint').dataset.add,arr=id.charAt(0)==='g'?r.g:r.r;
+    if(arr.indexOf(id)<0)arr.push(id);
+    autoScore(n);upd(n);save();
+  }
+});
+$('list').addEventListener('input',function(ev){
+  if(ev.target.matches('.time input')){
+    var n=+ev.target.closest('.ex').dataset.n;
+    S().rows[n].time=ev.target.value.replace(/\D/g,'').slice(0,2);
+    upd(n);save();
+  }
+});
+
+/* ===== события: шапка ===== */
+[['fio','fio'],['code','code'],['date','date'],['instr','instr'],['exam','exam']].forEach(function(p){
+  $(p[0]).addEventListener('input',function(){S()[p[1]]=this.value;if(p[1]==='fio'||p[1]==='code')summary();save();});
+});
+$('sign0').addEventListener('change',function(){S().sign[0]=this.checked;save();});
+$('sign1').addEventListener('change',function(){S().sign[1]=this.checked;save();});
+$('strip').addEventListener('click',function(ev){
+  var b=ev.target.closest('.st');
+  if(b){switchTo(b.dataset.id);return;}
+  if(ev.target.closest('#addSt')){
+    var ns=newStudent(S());DB.list.push(ns);DB.cur=ns.id;save();load();
+    window.scrollTo(0,0);$('fio').focus();
+  }
+});
+
+/* ===== диалог ошибок ===== */
+var cur=null;
+function optHTML(list,kind,arr){
+  return list.map(function(o){
+    return '<label class="opt '+kind+'"><input type="checkbox" data-id="'+o.id+'"'+(arr.indexOf(o.id)>=0?' checked':'')+'><span>'+o.t+'</span></label>';
+  }).join('');
+}
+function openDlg(n){
+  cur=n;var e=exOf(n),r=S().rows[n];
+  $('dlgTitle').textContent=e.n+'. '+e.t;
+  var g=e.knot?G_KNOT:G_COMMON,rm=e.knot?R_KNOT:R_COMMON;
+  $('dlgBody').innerHTML=
+    '<h3><span class="dot" style="background:var(--orange)"></span>Грубые ошибки: оценка 0</h3>'+optHTML(g,'g',r.g)+
+    '<h3><span class="dot" style="background:var(--amber)"></span>Замечания: оценка 1</h3>'+optHTML(rm,'r',r.r)+
+    '<h3>Свой комментарий</h3><textarea id="note" placeholder="Например: что именно произошло и на каком этапе">'+esc(r.note)+'</textarea>';
+  $('dlg').showModal();
+}
+$('dlgBody').addEventListener('change',function(ev){
+  var cb=ev.target;if(!cb.matches('input[type=checkbox]'))return;
+  var r=S().rows[cur],id=cb.dataset.id,key=id.charAt(0)==='g'?'g':'r';
+  r[key]=r[key].filter(function(x){return x!==id;});
+  if(cb.checked)r[key].push(id);
+  autoScore(cur);upd(cur);save();
+});
+$('dlgBody').addEventListener('input',function(ev){
+  if(ev.target.id==='note'){S().rows[cur].note=ev.target.value;upd(cur);save();}
+});
+$('dlgClose').addEventListener('click',function(){$('dlg').close();});
+$('dlg').addEventListener('click',function(ev){if(ev.target===$('dlg'))$('dlg').close();});
+
+/* ===== фото (уменьшаем, чтобы влезло в память браузера) ===== */
+function shrink(file,cb){
+  var img=new Image(),u=URL.createObjectURL(file);
+  img.onload=function(){
+    var m=480,k=Math.min(1,m/Math.max(img.width,img.height));
+    var c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*k));c.height=Math.max(1,Math.round(img.height*k));
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    URL.revokeObjectURL(u);cb(c.toDataURL('image/jpeg',0.8));
+  };
+  img.onerror=function(){URL.revokeObjectURL(u);cb('');};
+  img.src=u;
+}
+$('photoIn').addEventListener('change',function(){
+  var f=this.files[0],self=this;if(!f)return;
+  var id=DB.cur;
+  shrink(f,function(data){
+    self.value='';
+    if(!data)return;
+    var st=DB.list.filter(function(s){return s.id===id;})[0];
+    if(!st)return;
+    st.photo=data;if(id===DB.cur)setPhoto(data);flush();
+  });
+});
+$('rmPhoto').addEventListener('click',function(){S().photo='';setPhoto('');save();});
+
+/* ===== кнопки внизу ===== */
+$('print').addEventListener('click',function(){window.print();});
+$('clear').addEventListener('click',function(){
+  if(!confirm('Очистить бланк этого слушателя? Оценки, ошибки и фото будут удалены. ФИО и дата останутся.'))return;
+  var s=S();s.rows=blankRows();s.photo='';s.sign=[false,false];s.sent='';save();load();
+});
+$('delStudent').addEventListener('click',function(){
+  var s=S(),i=DB.list.indexOf(s);
+  if(!confirm('Удалить слушателя «'+shortName(s,i)+'» с этого устройства? Это нельзя отменить.'))return;
+  DB.list.splice(i,1);
+  if(!DB.list.length)DB.list.push(newStudent());
+  DB.cur=DB.list[Math.min(i,DB.list.length-1)].id;
+  save();load();window.scrollTo(0,0);
+});
+$('export').addEventListener('click',function(){
+  var blob=new Blob([JSON.stringify(DB)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ekzamen-skd-'+today()+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+});
+$('importBtn').addEventListener('click',function(){$('importIn').click();});
+$('importIn').addEventListener('change',function(){
+  var f=this.files[0],self=this;if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var d=normDB(JSON.parse(rd.result)),have={},added=0,firstId=null;
+      /* пустой чистый бланк, который был единственным, не нужен */
+      if(DB.list.length===1){var f0=DB.list[0];if(!f0.fio&&calc(f0).done===0&&!f0.photo)DB.list=[];}
+      DB.list.forEach(function(s){have[s.id]=1;});
+      d.list.forEach(function(s){
+        if(have[s.id])s.id=uid();
+        have[s.id]=1;DB.list.push(s);added++;if(!firstId)firstId=s.id;
+      });
+      DB.cur=firstId;
+      save();load();alert('Загружено слушателей: '+added);
+    }catch(e){alert('Не удалось прочитать файл. Нужен файл, скачанный из этой формы.');}
+    self.value='';
+  };
+  rd.readAsText(f);
+});
+$('wipe').addEventListener('click',function(){
+  if(!confirm('Удалить всех слушателей и все данные формы с этого устройства? Это нельзя отменить.'))return;
+  try{localStorage.removeItem(KEY);}catch(e){}
+  DB=normDB(null);flush();load();window.scrollTo(0,0);
+});
+
+/* ===== отправка в Google Таблицу ===== */
+var CFG_KEY='polati-exam-cfg';
+function cfgGet(){try{return JSON.parse(localStorage.getItem(CFG_KEY))||{};}catch(e){return {};}}
+function cfgSet(o){try{localStorage.setItem(CFG_KEY,JSON.stringify(o));}catch(e){}}
+function urlOk(u){return typeof u==='string'&&/^https:\/\/script\.google\.com\//.test(u.trim());}
+function showSent(){
+  var s=S(),el=$('sentLine');
+  el.className='sentline'+(s.sent?' ok':'');
+  el.textContent=s.sent?'Отправлено в таблицу: '+s.sent:'В таблицу ещё не отправлено';
+}
+function safeCell(v){return (typeof v==='string'&&/^[=+\-@]/.test(v))?"'"+v:v;}
+function buildPayload(st){
+  var c=calc(st);
+  var headers=['Отправлено','Дата','Код слушателя','Итого','Силовые','Узлы','Навески','Результат'];
+  var row=[new Date().toLocaleString('ru-RU'),st.date,safeCell(st.code.trim()),c.total,c.bs[1],c.bs[2],c.bs[3],c.done<17?'не заполнено':(c.ok?'сдан':'не сдан')];
+  EX.forEach(function(e){
+    var r=st.rows[e.n];
+    if(e.time){headers.push(e.n+'. '+e.t+': время, мин');row.push(r.time===''?'':Number(r.time));}
+    headers.push(e.n+'. '+e.t+': оценка');row.push(r.score===null?'':r.score);
+    headers.push(e.n+'. '+e.t+': ошибки и замечания');
+    var txt=r.g.map(function(id){return '[0] '+LABEL[id];}).concat(r.r.map(function(id){return '[1] '+LABEL[id];}));
+    if(r.note.trim())txt.push('Комментарий: '+r.note.trim());
+    row.push(txt.join('; '));
+  });
+  return {headers:headers,row:row};
+}
+function post(body){
+  var cfg=cfgGet(),payload=JSON.stringify(Object.assign({token:cfg.token||''},body));
+  var opt={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:payload};
+  return fetch(cfg.url.trim(),opt).then(function(r){return r.json();}).then(function(j){return {ok:!!j.ok,confirmed:true,error:j.error};})
+  .catch(function(){
+    /* браузер не дал прочитать ответ: шлём ещё раз без чтения ответа (запись в таблице не задвоится) */
+    return fetch(cfg.url.trim(),{method:'POST',mode:'no-cors',headers:opt.headers,body:payload})
+      .then(function(){return {ok:true,confirmed:false};})
+      .catch(function(){return {ok:false,error:'network'};});
+  });
+}
+function errText(e){return e==='token'?'неверное секретное слово':(e==='network'?'нет связи или адрес указан неверно':String(e||'неизвестная ошибка'));}
+var cfg0=cfgGet();$('cfgUrl').value=cfg0.url||'';$('cfgToken').value=cfg0.token||'';
+['cfgUrl','cfgToken'].forEach(function(id){$(id).addEventListener('input',function(){cfgSet({url:$('cfgUrl').value.trim(),token:$('cfgToken').value});});});
+$('cfgTest').addEventListener('click',function(){
+  var m=$('cfgMsg'),b=this;
+  if(!urlOk($('cfgUrl').value)){m.className='sentline err';m.textContent='Адрес должен начинаться с https://script.google.com/';return;}
+  b.disabled=true;m.className='sentline';m.textContent='Проверяю…';
+  post({test:true}).then(function(r){
+    b.disabled=false;
+    if(r.ok&&r.confirmed){m.className='sentline ok';m.textContent='Связь есть, таблица отвечает.';}
+    else if(r.ok){m.className='sentline';m.textContent='Запрос ушёл, но браузер не показал ответ. Отправьте тестового слушателя и проверьте таблицу.';}
+    else{m.className='sentline err';m.textContent='Не получилось: '+errText(r.error)+'.';}
+  });
+});
+$('send').addEventListener('click',function(){
+  var btn=this,cfg=cfgGet();
+  if(!urlOk(cfg.url)){alert('Сначала вставьте адрес веб-приложения в блоке «Таблица Google» внизу страницы.');$('cfgCard').scrollIntoView({behavior:'smooth'});return;}
+  var st=S();
+  if(!st.code.trim()){alert('Впишите код слушателя. В таблицу уходит код, а не ФИО.');window.scrollTo(0,0);$('code').focus();return;}
+  var c=calc(st);
+  if(c.done<17&&!confirm('Заполнено '+c.done+' из 17 упражнений. Отправить как есть?'))return;
+  btn.disabled=true;btn.textContent='Отправляю…';
+  post(buildPayload(st)).then(function(r){
+    btn.disabled=false;btn.textContent='Отправить в таблицу';
+    if(r.ok){
+      var d=new Date();st.sent=pad(d.getDate())+'.'+pad(d.getMonth()+1)+' '+hhmm()+(r.confirmed?'':' (ответа нет, проверьте таблицу)');
+      save();if(st.id===DB.cur)showSent();
+    }else{
+      var el=$('sentLine');el.className='sentline err';el.textContent='Не отправилось: '+errText(r.error)+'.';
+    }
+  });
+});
+
+/* если та же страница открыта в другой вкладке, подхватываем изменения */
+window.addEventListener('storage',function(e){
+  if(e.key!==KEY||!e.newValue||$('dlg').open)return;
+  try{
+    var keep=DB.cur,d=normDB(JSON.parse(e.newValue));
+    if(d.list.some(function(s){return s.id===keep;}))d.cur=keep;
+    DB=d;load();
+  }catch(_){}
+});
+
+build();
+load();
+flush();
+</script>
+</body>
+</html>
